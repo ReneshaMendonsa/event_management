@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Event Management Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9; /* Light background color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #app {
+            background-color: #fff; /* White background for the content area */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        button {
+            background-color: #007BFF; /* Blue background for buttons */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for hover */
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        #events-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #events-list li {
+            background-color: #f9f9f9; /* Light background for event items */
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        #events-list li:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+            background-color: #e9ecef; /* Slightly darker background on hover */
+        }
+
+        #event-creation form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #event-creation input, #event-creation textarea {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        #event-creation textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        #event-creation button {
+            background-color: #28a745; /* Green for create button */
+            color: white;
+        }
+
+        #event-creation button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Event Management</h1>
+        <button id="load-events">Load Events</button>
+        <ul id="events-list"></ul>
+        
+        <!-- Event Creation Form -->
+        <div id="event-creation">
+            <h2>Create New Event</h2>
+            <form id="event-form">
+                <input type="text" id="name" placeholder="Event Name" required>
+                <textarea id="description" placeholder="Event Description" required></textarea>
+                <input type="text" id="location" placeholder="Event Location" required>
+                <input type="date" id="date" required>
+                <button type="submit">Create Event</button>
+            </form>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Event Management JavaScript for interactivity
+        document.getElementById("load-events").addEventListener("click", loadEvents);
+        document.getElementById("event-form").addEventListener("submit", createEvent);
+
+        // Example event data (in real use, this would come from an API or database)
+        const events = [
+            { name: "Tech Conference", description: "A tech conference for developers.", location: "City Hall", date: "2024-01-20" },
+            { name: "Music Festival", description: "A weekend of music and fun.", location: "Central Park", date: "2024-05-10" }
+        ];
+
+        function loadEvents() {
+            const eventsList = document.getElementById("events-list");
+            eventsList.innerHTML = '';  // Clear the list before adding new items
+            
+            if (events.length === 0) {
+                eventsList.innerHTML = "<li>No events to display.</li>";
+            } else {
+                events.forEach(event => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${event.name}</strong> - ${event.date}<br>${event.description}<br>Location: ${event.location}`;
+                    eventsList.appendChild(li);
+                });
+            }
+        }
+
+        function createEvent(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const description = document.getElementById("description").value;
+            const location = document.getElementById("location").value;
+            const date = document.getElementById("date").value;
+
+            if (name && description && location && date) {
+                // Create new event and add it to the events array
+                const newEvent = { name, description, location, date };
+                events.push(newEvent);
+
+                // Clear the form fields
+                document.getElementById("name").value = '';
+                document.getElementById("description").value = '';
+                document.getElementById("location").value = '';
+                document.getElementById("date").value = '';
+
+                // Give feedback to the user
+                alert("Event Created Successfully!");
+
+                // Reload the event list to include the new event
+                loadEvents();
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+    </script>
+</body>
+</html>
